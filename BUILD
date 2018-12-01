@@ -23,3 +23,19 @@ py_binary(
         requirement("antlr4-python3-runtime"),
     ],
 )
+
+
+
+cc_library(
+    name = "monoid",
+    srcs = [],
+    hdrs = ["cpp/Monoids.hpp", "cpp/Utils.hpp",],
+)
+
+cc_binary(
+    name = "monoid_test",
+    srcs = ["cpp/Monoids.cpp"],
+    deps = [
+        ":monoid",
+    ],
+)
