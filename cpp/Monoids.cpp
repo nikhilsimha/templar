@@ -33,7 +33,12 @@ int main() {
     avger.update(state, std::move(za));
     std::cout << avger.finalize(std::move(state)) << std::endl;
 
-
+    // IDEA:
+    // input -> state could be reducer
+    // state -> output could be a mapper/finalizer
+    // that way a single state like sum could be
+    // finalized into sum and avg - saving some space in storage
+    // but for now, I don't have another example of its usefulness
     auto ord = monoids::OrderBy<OrderingInput, vector<OrderingInput>, vector<string>>(4, false);
     OrderingInput inp1 = {1, "one"};
     OrderingInput inp2 = {2, "two"};

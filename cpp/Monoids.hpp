@@ -34,7 +34,7 @@ public:
         returned += moved;
     }
 
-    virtual Output finalize(State&& state) const override final {
+    Output finalize(State&& state) const override final {
         return state;
     }
 };
@@ -62,7 +62,7 @@ public:
         returned.count += moved.count;
     }
 
-    virtual Output finalize(State&& state) const override final {
+    Output finalize(State&& state) const override final {
         return ((Output) state.sum) /((Output) state.count);
     }
 };
@@ -83,7 +83,7 @@ public:
         returned += moved;
     }
 
-    virtual Output finalize(State&& state) const override final {
+    Output finalize(State&& state) const override final {
         return state;
     }
 };
@@ -124,7 +124,8 @@ public:
     // statetype has to be a vector of input - or template substitution will fail.
     State init(Input&& input) const override final {
         State state;
-        state.reserve(_limit);
+        // the heap will always be have less than _limit + 1 elements during updates.
+        state.reserve(_limit + 1);
         state.emplace_back(input);
         return state;
     }
@@ -164,7 +165,7 @@ public:
         prune_heap(returned);
     }
 
-    virtual Output finalize(State&& state) const override final {
+    Output finalize(State&& state) const override final {
         std::sort_heap(
             state.begin(),
             state.end(),
@@ -177,4 +178,8 @@ public:
         return output;
     }
 };
+
+// TODO: Approx unique - hll-tailcut+ 2017 paper: better with fewer bits
+// TODO: Approx quantiles - tdigest is the keyword
+
 }
