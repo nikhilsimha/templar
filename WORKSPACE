@@ -58,3 +58,16 @@ bind(
     name = "gtest",
     actual = "@com_github_google_googletest//:gtest",
 )
+
+
+#t-digest
+git_repository(
+    name = "com_github_derrickburns_tdigest",
+    remote = "https://github.com/derrickburns/tdigest",
+    commit = "080dcc7c982111ebaf8688b7d021092c0fa286a0",
+)
+
+bind(
+    name = "tdigest",
+    actual = "@com_github_derrickburns_tdigest//:tdigest",
+)

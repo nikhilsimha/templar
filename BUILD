@@ -33,6 +33,7 @@ cc_library(
     deps = [
         "//external:glog",
         "//external:gtest",
+        "//external:tdigest",
     ]
 )
 
