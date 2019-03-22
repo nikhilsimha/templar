@@ -45,8 +45,8 @@ git_repository(
 
 git_repository(
     name = "com_github_google_googletest",
-    remote = "https://github.com/google/glog.git",
-    tag = "v0.4.0"
+    remote = "https://github.com/google/googletest.git",
+    tag = "release-1.8.1"
 )
 
 bind(
@@ -56,5 +56,5 @@ bind(
 
 bind(
     name = "gtest",
-    actual = "@com_github_glog_glog//:glog",
+    actual = "@com_github_google_googletest//:gtest",
 )
