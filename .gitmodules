@@ -1,3 +1,0 @@
-[submodule "tdigest"]
-	path = tdigest
-	url = https://github.com/derrickburns/tdigest

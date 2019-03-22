@@ -26,3 +26,35 @@ http_file(
     url = "https://www.antlr.org/download/antlr-4.7.1-complete.jar",
     executable = True,
 )
+
+
+
+
+#glog + gtest + gflags
+git_repository(
+    name = "com_github_gflags_gflags",
+    remote = "https://github.com/gflags/gflags.git",
+    tag = "v2.2.2"
+)
+
+git_repository(
+    name = "com_github_glog_glog",
+    remote = "https://github.com/google/glog.git",
+    tag = "v0.4.0"
+)
+
+git_repository(
+    name = "com_github_google_googletest",
+    remote = "https://github.com/google/glog.git",
+    tag = "v0.4.0"
+)
+
+bind(
+    name = "glog",
+    actual = "@com_github_glog_glog//:glog",
+)
+
+bind(
+    name = "gtest",
+    actual = "@com_github_glog_glog//:glog",
+)

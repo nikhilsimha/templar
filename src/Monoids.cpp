@@ -9,7 +9,7 @@ using namespace std;
 
 struct AvgState {
     int64_t sum;
-    uint count;
+    uint32_t count;
 };
 
 struct OrderingInput {

@@ -29,12 +29,16 @@ py_binary(
 cc_library(
     name = "monoid",
     srcs = [],
-    hdrs = ["cpp/Monoids.hpp", "cpp/Utils.hpp",],
+    hdrs = ["src/Monoids.hpp", "src/Utils.hpp",],
+    deps = [
+        "//external:glog",
+        "//external:gtest",
+    ]
 )
 
 cc_binary(
     name = "monoid_test",
-    srcs = ["cpp/Monoids.cpp"],
+    srcs = ["src/Monoids.cpp"],
     deps = [
         ":monoid",
     ],
