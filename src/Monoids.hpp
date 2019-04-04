@@ -1,6 +1,7 @@
 #pragma once
 #include <algorithm>
 #include <functional>
+#include "TDigest.h"
 
 namespace monoids {
 
@@ -110,76 +111,59 @@ public:
     }
 };
 
-template<typename Input, typename State, typename Output>
-class OrderBy : public Monoid<Input, State, Output>
+
+
+
+// Approximate Quantile monoid based on TDigest implementation by Derrick Burns
+template<typename Input, typename Double, typename Double>
+class Quantile : public Monoid<Input, Double, Double>
 {
-private:
-    size_t _limit;
-    bool _ascending; // = bottom, desceding = top
-
 public:
-    explicit OrderBy(size_t limit, bool ascending) :
-    _limit(limit), _ascending(ascending) {}
-
-    // statetype has to be a vector of input - or template substitution will fail.
     State init(Input&& input) const override final {
-        State state;
-        // the heap will always be have less than _limit + 1 elements during updates.
-        state.reserve(_limit + 1);
-        state.emplace_back(input);
+        State state {input};
         return state;
     }
 
-    auto inputComparator() const {
-        return [ascending = _ascending](const Input& first, const Input& second) {
-            if(ascending) return first.key < second.key;
-            return first.key > second.key;
-        };
-    }
-
-    void prune_heap(State& state) const {
-        while(state.size() > _limit) {
-            std::pop_heap(
-                state.begin(),
-                state.end(),
-                inputComparator()
-            );
-            state.pop_back();
-        }
-    }
-
     void update(State& state, Input&& input) const override final {
-        state.emplace_back(input);
-        std::push_heap(
-            state.begin(),
-            state.end(),
-            inputComparator()
-        );
-        prune_heap(state);
+        state.insert(input);
     }
 
     void merge(State& returned, State&& moved) const override final {
-        returned.reserve(returned.size() + moved.size());
-        returned.insert(returned.end(), moved.begin(), moved.end());
-        std::make_heap(returned.begin(), returned.end(), inputComparator());
-        prune_heap(returned);
+        returned.insert(moved.begin(), moved.end());
     }
 
-    Output finalize(State&& state) const override final {
-        std::sort_heap(
-            state.begin(),
-            state.end(),
-            inputComparator());
-        Output output;
-        output.reserve(state.size());
-        for(auto&& elem: state) {
-            output.emplace_back(std::move(elem.value));
-        }
-        return output;
+    virtual Output finalize(State&& state) const override final {
+        return state.size();
+    }
+};
+
+
+// Moments
+template<typename Input, typename Double, typename Double>
+class MomentMonoid : public Monoid<Double, Double, Double>
+{
+public:
+    State init(Input&& input) const override final {
+        State state {input};
+        return state;
+    }
+
+    void update(State& state, Input&& input) const override final {
+        state.insert(input);
+    }
+
+    void merge(State& returned, State&& moved) const override final {
+        returned.insert(moved.begin(), moved.end());
+    }
+
+    virtual Output finalize(State&& state) const override final {
+        return state.size();
     }
 };
 
 // TODO: Approx unique - hll-tailcut+ 2017 paper: better with fewer bits
-// TODO: Approx quantiles - tdigest is the keyword
 
+/*
+
+*/
 }

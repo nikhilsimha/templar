@@ -29,7 +29,7 @@ py_binary(
 cc_library(
     name = "monoid",
     srcs = [],
-    hdrs = ["src/Monoids.hpp", "src/Utils.hpp",],
+    hdrs = ["src/*.hpp"],
     deps = [
         "//external:glog",
         "//external:gtest",
